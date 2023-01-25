@@ -36,9 +36,8 @@ public class AmbulanceAPIControllerV1 {
 
     @GetMapping(value = "/ambulance/{id}")
     public ResponseEntity<Ambulance> getAmbulanceDetail(@PathVariable(value = "id") Long ambulanceId){
-
-        Optional<Ambulance> optAmbulance = ambulanceService.getAmbulanceDetail(ambulanceId);
-        return optAmbulance.map(ambulance -> ResponseEntity.status(HttpStatus.OK).body(ambulance)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        Ambulance ambulance = ambulanceService.getAmbulanceDetail(ambulanceId);
+        return ResponseEntity.status(HttpStatus.OK).body(ambulance);
     }
 
     @PostMapping(value = "/ambulance")

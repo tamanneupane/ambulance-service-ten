@@ -1,11 +1,13 @@
 package com.aggregrator.ambulanceservice.service;
 
+import com.aggregrator.ambulanceservice.exception.AmbulanceNotFoundException;
 import com.aggregrator.ambulanceservice.model.Address;
 import com.aggregrator.ambulanceservice.model.Ambulance;
 import com.aggregrator.ambulanceservice.model.dto.AddressDTO;
 import com.aggregrator.ambulanceservice.model.dto.AmbulanceDTO;
 import com.aggregrator.ambulanceservice.repository.AmbulanceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,11 +26,14 @@ public class AmbulanceService {
         return ambulanceRepository.findAll();
     }
 
-    public Optional<Ambulance> getAmbulanceDetail(Long ambulanceId){
-        List<String> phones = List.of("01-444567","01-444789");
-        Address address = new Address("Bagmati", "Lalitpur","Jawlakhel");
-        Ambulance ambulance =  new Ambulance("Alka Hospital", 27.82, 85.27, true, LocalDateTime.now());
-        return Optional.of(ambulance);
+    public Ambulance getAmbulanceDetail(Long ambulanceId) {
+        Optional<Ambulance> optionalAmbulance = ambulanceRepository.findById(ambulanceId);
+
+        if(optionalAmbulance.isPresent()){
+            return optionalAmbulance.get();
+        }else {
+            throw new AmbulanceNotFoundException(String.format("The ambulance with the id %d is not present", ambulanceId), 404);
+        }
     }
 
     public Ambulance createAmbulance(AmbulanceDTO ambulanceDTO){
@@ -52,7 +57,7 @@ public class AmbulanceService {
 
            return ambulanceRepository.save(ambulanceToUpdate);
         }else{
-            throw new RuntimeException(String.format("The ambulance with the id %d is not present", ambulanceId));
+            throw new AmbulanceNotFoundException(String.format("The ambulance with the id %d is not present", ambulanceId), 404);
         }
 
 //        AddressDTO addressDTO = ambulanceDTO.getAddress();
@@ -61,6 +66,11 @@ public class AmbulanceService {
     }
 
     public void deleteAmbulance(Long ambulanceId){
-        ambulanceRepository.deleteById(ambulanceId);
+        try {
+            ambulanceRepository.deleteById(ambulanceId);
+        }catch (EmptyResultDataAccessException ex){
+            throw new AmbulanceNotFoundException(String.format("The ambulance with the id %d is not present", ambulanceId), 404);
+        }
+
     }
 }

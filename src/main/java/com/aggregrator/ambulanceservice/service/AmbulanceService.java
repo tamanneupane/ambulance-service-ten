@@ -32,7 +32,7 @@ public class AmbulanceService {
         if(optionalAmbulance.isPresent()){
             return optionalAmbulance.get();
         }else {
-            throw new AmbulanceNotFoundException(String.format("The ambulance with the id %d is not present", ambulanceId), 404);
+            throw new AmbulanceNotFoundException(String.format("getAmbulanceDetail - The ambulance with the id %d is not present", ambulanceId), 404);
         }
     }
 
@@ -57,7 +57,7 @@ public class AmbulanceService {
 
            return ambulanceRepository.save(ambulanceToUpdate);
         }else{
-            throw new AmbulanceNotFoundException(String.format("The ambulance with the id %d is not present", ambulanceId), 404);
+            throw new AmbulanceNotFoundException(String.format("updateAmbulance - The ambulance with the id %d is not present", ambulanceId), 404);
         }
 
 //        AddressDTO addressDTO = ambulanceDTO.getAddress();
@@ -69,8 +69,7 @@ public class AmbulanceService {
         try {
             ambulanceRepository.deleteById(ambulanceId);
         }catch (EmptyResultDataAccessException ex){
-            throw new AmbulanceNotFoundException(String.format("The ambulance with the id %d is not present", ambulanceId), 404);
+            throw new AmbulanceNotFoundException(String.format("deleteAmbulance - The ambulance with the id %d is not present", ambulanceId), 404);
         }
-
     }
 }

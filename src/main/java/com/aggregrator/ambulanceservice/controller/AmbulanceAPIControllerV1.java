@@ -5,6 +5,13 @@ import com.aggregrator.ambulanceservice.model.Ambulance;
 import com.aggregrator.ambulanceservice.model.dto.AddressDTO;
 import com.aggregrator.ambulanceservice.model.dto.AmbulanceDTO;
 import com.aggregrator.ambulanceservice.service.AmbulanceService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +30,14 @@ public class AmbulanceAPIControllerV1 {
     @Autowired
     AmbulanceService ambulanceService;
 
-    @PostMapping(value = "")
-    public String ping(){
-        return "Ambulance Service is working fine in V1";
-    }
 
+    @Operation(summary = "Get Ambulance List")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of ambulances",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Ambulance.class))
+            })
+    })
     @GetMapping(value = "/ambulance/list")
     public ResponseEntity<Iterable<Ambulance>> ambulanceList(@RequestParam(value = "city", required = false) String cityName, @RequestParam(value = "lat", required = false) Double lat,@RequestParam(value = "lon", required = false)  Double lon){
         Iterable<Ambulance> ambulanceList = ambulanceService.getAmbulanceList();

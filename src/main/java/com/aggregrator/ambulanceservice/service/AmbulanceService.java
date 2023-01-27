@@ -38,7 +38,7 @@ public class AmbulanceService {
 
     public Ambulance createAmbulance(AmbulanceDTO ambulanceDTO){
         AddressDTO addressDTO = ambulanceDTO.getAddress();
-        Address address = new Address(addressDTO.getProvince(),addressDTO.getCity(), addressDTO.getAddress());
+//        Address address = new Address(addressDTO.getProvince(),addressDTO.getCity(), addressDTO.getAddress());
         Ambulance ambulance = new Ambulance(ambulanceDTO.getName(), ambulanceDTO.getLat(), ambulanceDTO.getLon(), ambulanceDTO.isOpen(), LocalDateTime.now());
         return ambulanceRepository.save(ambulance);
     }

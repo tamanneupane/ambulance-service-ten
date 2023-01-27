@@ -27,7 +27,10 @@ public class Ambulance {
 
     @Setter
     private double lon;
-//    private Address address;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "fk_address_id")
+    private Address address;
 
     @Column(name = "is_opened")
     @Setter
